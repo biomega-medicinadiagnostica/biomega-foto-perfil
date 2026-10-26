@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#193750">
+<title>Foto de Perfil | Biomega</title>
+<style>
+:root{--navy:#193750;--red:#b0182e;--blue:#4775a6;--white:#fff;--muted:#5d7182;--border:#dce5ec}*{box-sizing:border-box}body{margin:0;background:#f3f6f9;color:var(--navy);font:16px/1.45 Arial,Helvetica,sans-serif}.wrap{max-width:1020px;margin:0 auto;padding:24px 14px 40px}.card{background:#fff;border-radius:18px;box-shadow:0 12px 36px #19375018;overflow:hidden}.hero{background:var(--navy);color:#fff;padding:26px 30px}.hero h1{margin:0 0 5px;font-size:clamp(24px,4vw,34px)}.hero p{margin:0;color:#d8e3ed}.content{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,390px);gap:24px;padding:24px}.steps{display:grid;gap:14px;align-content:start}.step{border:1px solid var(--border);border-radius:13px;padding:15px}.step h2{font-size:17px;margin:0 0 10px}.hint{color:var(--muted);font-size:13px;margin:8px 0 0}.btn{border:0;border-radius:9px;padding:11px 15px;background:var(--red);color:white;font:inherit;font-weight:700;cursor:pointer}.btn.secondary{background:var(--navy)}.btn:disabled{opacity:.45;cursor:not-allowed}input[type=file]{display:block;width:100%;font:inherit}input[type=range]{width:100%;accent-color:var(--red)}label{font-weight:600;display:block;margin:9px 0 5px}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.preview{align-self:start;text-align:center;min-width:0}.preview canvas{display:block;width:100%;height:auto;background:#e9eef2;border:1px solid #e0e7ed;border-radius:12px}.preview p{font-size:13px;color:var(--muted)}.status{min-height:22px;color:#375b78;font-size:14px;margin-top:9px;overflow-wrap:anywhere}.status.error{color:#a20d26}.status.success{color:#176b45}.footer{text-align:center;color:#607587;font-size:12px;margin-top:14px}.small{font-size:12px;color:var(--muted)}.hero-top{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}.help-btn{border:1px solid #ffffffa6;border-radius:9px;padding:10px 14px;background:transparent;color:#fff;font:inherit;font-weight:700;cursor:pointer}.help-btn:hover{background:#ffffff18}.modal{position:fixed;inset:0;background:#102536b8;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal.open{display:flex}.modal-card{background:#fff;color:var(--navy);border-radius:16px;max-width:540px;width:100%;padding:24px;max-height:90vh;overflow:auto;box-shadow:0 20px 60px #0003}.modal-card h2{margin:0 0 12px}.modal-card li{margin:10px 0}.modal-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}.contact-link{color:var(--red);font-weight:700;overflow-wrap:anywhere}.close-btn{border:0;border-radius:8px;padding:10px 14px;background:var(--navy);color:#fff;font:inherit;font-weight:700;cursor:pointer}@media(max-width:740px){.content{grid-template-columns:1fr;padding:15px}.hero{padding:21px}.preview{max-width:420px;margin:0 auto;width:100%;grid-row:1}.steps{grid-row:2}}
+</style>
+</head>
+<body>
+<main class="wrap"><section class="card">
+<header class="hero"><div class="hero-top"><div><h1>Foto de perfil corporativa</h1><p>Biomega · Envie sua foto, ajuste o enquadramento e baixe a imagem pronta.</p></div><button class="help-btn" id="helpOpen" type="button" aria-haspopup="dialog" aria-controls="helpModal">Como usar?</button></div></header>
+<div class="content"><section class="steps">
+<div class="step"><h2>1. Envie sua fotografia</h2><input id="file" type="file" accept="image/jpeg,image/png,image/webp"><p class="hint">Use JPG, PNG ou WEBP. Escolha uma foto nítida, de frente e com boa iluminação. A imagem será processada neste navegador e não é enviada a um servidor por esta página.</p></div>
+<div class="step"><h2>2. Remova o fundo</h2><button class="btn secondary" id="remove" disabled>Remover fundo</button><p class="hint">Na primeira utilização, o navegador baixa uma biblioteca e um modelo de IA (dezenas de MB). Mantenha a página aberta e aguarde.</p><div id="status" class="status" role="status" aria-live="polite">Aguardando uma fotografia.</div></div>
+<div class="step"><h2>3. Ajuste o enquadramento</h2><label for="zoom">Zoom</label><input id="zoom" type="range" min="0.65" max="1.8" step="0.01" value="1" disabled><label for="xpos">Posição horizontal</label><input id="xpos" type="range" min="-350" max="350" step="1" value="0" disabled><label for="ypos">Posição vertical</label><input id="ypos" type="range" min="-350" max="350" step="1" value="0" disabled><p class="hint">A prévia aparece assim que você seleciona a foto. Ajuste o enquadramento antes ou depois de remover o fundo.</p></div>
+<div class="step"><h2>4. Baixe sua foto</h2><div class="controls"><button class="btn" id="download" disabled>Baixar PNG</button><button class="btn secondary" id="reset" disabled>Recomeçar</button></div><p class="hint">O PNG final será quadrado, com a moldura corporativa.</p></div>
+</section><aside class="preview"><canvas id="canvas" width="2048" height="2048" aria-label="Prévia da foto corporativa"></canvas><p>Prévia da composição final</p></aside></div></section><p class="footer">Ferramenta de uso interno · Biomega</p><p class="small">As fotografias permanecem no dispositivo durante o processamento. Para remover o fundo, o navegador baixa componentes de terceiros; veja o README para observações de licença.</p></main>
+<div class="modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="modal-card">
+    <h2 id="helpTitle">Como usar o gerador</h2>
+    <ol>
+      <li>Clique em <strong>Escolher arquivo</strong> e selecione uma foto nítida, de frente e bem iluminada.</li>
+      <li>Confira a prévia e use os controles de zoom e posição para ajustar o enquadramento.</li>
+      <li>Clique em <strong>Remover fundo</strong> e aguarde. Na primeira utilização, o carregamento pode demorar alguns minutos.</li>
+      <li>Confira o resultado e clique em <strong>Baixar PNG</strong>.</li>
+      <li>Use a imagem baixada como sua foto de perfil corporativa.</li>
+    </ol>
+    <p>Se precisar de ajuda, entre em contato com o setor de Marketing:</p>
+    <p><a class="contact-link" href="mailto:marketing@biomega.com.br">marketing@biomega.com.br</a></p>
+    <div class="modal-actions"><span class="small">Dica: prefira uma foto individual, com rosto e ombros visíveis.</span><button class="close-btn" id="helpClose" type="button">Entendi</button></div>
+  </div>
+</div>
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const canvas = $('canvas');
+const helpModal = $('helpModal');
+$('helpOpen').addEventListener('click', () => { helpModal.classList.add('open'); $('helpClose').focus(); });
+$('helpClose').addEventListener('click', () => { helpModal.classList.remove('open'); $('helpOpen').focus(); });
+helpModal.addEventListener('click', (event) => { if (event.target === helpModal) { helpModal.classList.remove('open'); $('helpOpen').focus(); } });
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && helpModal.classList.contains('open')) { helpModal.classList.remove('open'); $('helpOpen').focus(); } });
+const ctx = canvas.getContext('2d', { alpha: true });
+const W = canvas.width, H = canvas.height;
+const CX = 1024, CY = 1024, R = 815;
+let original = null, selectedFile = null, cutout = null, whiteLogoLayer = null, frameOverlay = null;
+let currentObjectURL = null, processing = false;
+
+function setStatus(message, kind='') {
+  const el = $('status'); el.textContent = message; el.className = 'status' + (kind ? ' ' + kind : '');
+}
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const im = new Image();
+    im.onload = () => resolve(im);
+    im.onerror = () => reject(new Error('A imagem não pôde ser decodificada pelo navegador. Tente JPG ou PNG.'));
+    im.src = src;
+  });
+}
+function setControls(enabled) {
+  ['zoom','xpos','ypos'].forEach(id => { $(id).disabled = !enabled; });
+}
+function drawPhoto(photo) {
+  if (!photo) return;
+  const zoom = Number($('zoom').value || 1);
+  const dx = Number($('xpos').value || 0), dy = Number($('ypos').value || 0);
+  const iw = photo.naturalWidth || photo.width, ih = photo.naturalHeight || photo.height;
+  if (!iw || !ih) return;
+  const scale = Math.max((R * 2) / iw, (R * 2) / ih) * zoom;
+  const dw = iw * scale, dh = ih * scale;
+  ctx.save(); ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2); ctx.clip();
+  ctx.drawImage(photo, CX - dw / 2 + dx, CY - dh / 2 + dy, dw, dh);
+  ctx.restore();
+}
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  if (whiteLogoLayer) ctx.drawImage(whiteLogoLayer, 0, 0, W, H);
+  else { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H); }
+  if (cutout || original) drawPhoto(cutout || original);
+  if (frameOverlay) ctx.drawImage(frameOverlay, 0, 0, W, H);
+}
+async function init() {
+  try {
+    [whiteLogoLayer, frameOverlay] = await Promise.all([
+      loadImage('./assets/fundo-branco-logo.png'),
+      loadImage('./assets/moldura-azul-bordo.png')
+    ]);
+    draw();
+    setStatus('Moldura carregada. Selecione sua fotografia.');
+  } catch (err) {
+    console.error('Falha ao carregar os arquivos gráficos:', err);
+    setStatus('Não foi possível carregar a moldura. Confira se a pasta assets está no mesmo nível do index.html e se contém fundo-branco-logo.png e moldura-azul-bordo.png.', 'error');
+  }
+}
+$('file').addEventListener('change', async () => {
+  const file = $('file').files && $('file').files[0];
+  if (!file) return;
+  if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+    setStatus('Formato não reconhecido. Use uma imagem JPG, PNG ou WEBP.', 'error'); return;
+  }
+  try {
+    if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
+    currentObjectURL = URL.createObjectURL(file);
+    const img = await loadImage(currentObjectURL);
+    original = img; selectedFile = file; cutout = null;
+    $('remove').disabled = false; $('download').disabled = true; $('reset').disabled = false;
+    setControls(true);
+    $('zoom').value = '1'; $('xpos').value = '0'; $('ypos').value = '0';
+    draw();
+    setStatus('Prévia carregada. Ajuste o enquadramento e clique em “Remover fundo”.');
+  } catch (err) {
+    console.error(err); original = null; cutout = null; draw();
+    setStatus(err.message || 'Não foi possível abrir a imagem. Tente JPG ou PNG.', 'error');
+  }
+});
+
+async function importRemover() {
+  const urls = [
+    'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm',
+    'https://esm.sh/@imgly/background-removal@1.7.0?bundle'
+  ];
+  let lastError;
+  for (const url of urls) {
+    try {
+      const mod = await import(url);
+      const fn = mod.default || mod.removeBackground;
+      if (typeof fn !== 'function') throw new Error('A biblioteca carregou, mas não disponibilizou a função de remoção.');
+      return fn;
+    } catch (err) { lastError = err; console.warn('Falha ao carregar biblioteca por', url, err); }
+  }
+  throw lastError || new Error('Não foi possível carregar a biblioteca de remoção de fundo.');
+}
+$('remove').addEventListener('click', async () => {
+  if (!original || processing) return;
+  processing = true; $('remove').disabled = true;
+  setStatus('Carregando a ferramenta de remoção de fundo. Isso pode levar alguns minutos na primeira utilização…');
+  try {
+    const removeBackground = await importRemover();
+    setStatus('A ferramenta foi carregada. Processando a fotografia…');
+    if (!selectedFile) throw new Error('Selecione novamente a fotografia antes de remover o fundo.');
+    const result = await removeBackground(selectedFile, {
+      publicPath: 'https://staticimgly.com/@imgly/background-removal-data/1.7.0/dist/',
+      debug: true,
+      device: 'cpu',
+      progress: (key, current, total) => {
+        setStatus('Processando: ' + key + ' (' + current + '/' + total + ')…');
+        console.debug('[Biomega background removal]', key, current, total);
+      },
+      output: { format: 'image/png', type: 'foreground' }
+    });
+    if (!(result instanceof Blob) || result.size === 0) throw new Error('O processamento terminou sem gerar uma imagem.');
+    const resultUrl = URL.createObjectURL(result);
+    try { cutout = await loadImage(resultUrl); } finally { URL.revokeObjectURL(resultUrl); }
+    draw(); $('download').disabled = false;
+    setStatus('Fundo removido! Ajuste o enquadramento e baixe sua foto.', 'success');
+  } catch (err) {
+    console.error('Erro detalhado na remoção de fundo:', err);
+    const detail = (err && err.message) ? String(err.message).slice(0, 220) : String(err).slice(0, 220);
+    setStatus('Não foi possível remover o fundo. Verifique a conexão ou se a rede bloqueia os CDNs. Detalhe: ' + detail, 'error');
+  } finally { processing = false; $('remove').disabled = !original; }
+});
+['zoom','xpos','ypos'].forEach(id => $(id).addEventListener('input', draw));
+$('download').addEventListener('click', () => {
+  if (!cutout) return;
+  draw();
+  canvas.toBlob(blob => {
+    if (!blob) { setStatus('Não foi possível gerar o PNG. Tente novamente.', 'error'); return; }
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'biomega-foto-perfil.png'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }, 'image/png');
+});
+$('reset').addEventListener('click', () => {
+  if (currentObjectURL) { URL.revokeObjectURL(currentObjectURL); currentObjectURL = null; }
+  original = null; selectedFile = null; cutout = null; $('file').value = '';
+  $('remove').disabled = true; $('download').disabled = true; $('reset').disabled = true;
+  setControls(false); $('zoom').value = '1'; $('xpos').value = '0'; $('ypos').value = '0';
+  draw(); setStatus('Envie uma nova fotografia para começar.');
+});
+init();
+</script>
+</body>
+</html>
